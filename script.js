@@ -101,11 +101,10 @@ function toggleRamo(nombre) {
 function actualizarEstado() {
   ramos.forEach(ramo => {
     const nombre = ramo.nombre;
-    const el = document.querySelector(`[data-nombre=\"${nombre}\"]`);
+    const el = document.querySelector(`[data-nombre="${nombre}"]`);
     const requisitos = ramos.filter(r => (r.abre || []).includes(nombre));
     const cumplidos = requisitos.every(req => estado[req.nombre]);
 
-    // Si es del 1° semestre → se puede marcar desde el inicio
     if (ramo.semestre === 1 || requisitos.length === 0) {
       el.classList.remove("bloqueado");
     } else {
