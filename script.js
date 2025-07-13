@@ -10,6 +10,7 @@ const ramos = [
   { nombre: "Salud y Sociedad Contemporánea", semestre: 2, abre: ["Educación para la Salud", "Enfermería Ambiental"] },
   { nombre: "Prevención de Infecciones Asociadas a la Atención en Salud", semestre: 2, abre: ["Cuidados de Enfermería I"] },
   { nombre: "Fundamentos de Enfermería", semestre: 2, abre: ["Educación para la Salud", "Administración General y en Salud", "Enfermería Ambiental"] },
+  { nombre: "Primeros Auxilios", semestre: 2 },
   { nombre: "Introducción al pensamiento filosófico", semestre: 2 },
   { nombre: "Inglés I", semestre: 2, abre: ["Inglés II"] },
   { nombre: "Comunicación Efectiva", semestre: 2 },
@@ -73,19 +74,14 @@ function crearMalla() {
     }
 
     const btn = document.createElement("div");
-    btn.className = tieneRequisitos(ramo.nombre) ? "ramo bloqueado" : "ramo";
+    btn.className = "ramo bloqueado";
     btn.innerText = ramo.nombre;
     btn.setAttribute("data-nombre", ramo.nombre);
-
     btn.onclick = () => toggleRamo(ramo.nombre);
     columnas[ramo.semestre].appendChild(btn);
   });
 
   actualizarEstado();
-}
-
-function tieneRequisitos(nombre) {
-  return ramos.some(r => (r.abre || []).includes(nombre));
 }
 
 function toggleRamo(nombre) {
@@ -94,10 +90,8 @@ function toggleRamo(nombre) {
 
   if (estado[nombre]) {
     delete estado[nombre];
-    el.classList.remove("aprobado");
   } else {
     estado[nombre] = true;
-    el.classList.add("aprobado");
   }
 
   guardarEstado();
@@ -107,19 +101,19 @@ function toggleRamo(nombre) {
 function actualizarEstado() {
   ramos.forEach(ramo => {
     const nombre = ramo.nombre;
-    const el = document.querySelector(`[data-nombre="${nombre}"]`);
+    const el = document.querySelector(`[data-nombre=\"${nombre}\"]`);
     const requisitos = ramos.filter(r => (r.abre || []).includes(nombre));
     const cumplidos = requisitos.every(req => estado[req.nombre]);
 
-    if (requisitos.length === 0) {
+    // Si es del 1° semestre → se puede marcar desde el inicio
+    if (ramo.semestre === 1 || requisitos.length === 0) {
       el.classList.remove("bloqueado");
     } else {
       if (cumplidos) {
         el.classList.remove("bloqueado");
       } else {
-        el.classList.remove("aprobado");
-        delete estado[nombre];
         el.classList.add("bloqueado");
+        delete estado[nombre];
       }
     }
 
@@ -129,11 +123,19 @@ function actualizarEstado() {
       el.classList.remove("aprobado");
     }
   });
+
+  guardarEstado();
 }
 
 function guardarEstado() {
   localStorage.setItem("estadoRamos", JSON.stringify(estado));
 }
 
-crearMalla();
+document.getElementById("reiniciar").addEventListener("click", () => {
+  if (confirm("¿Estás segura de que quieres reiniciar la malla? 🥺")) {
+    localStorage.removeItem("estadoRamos");
+    location.reload();
+  }
+});
 
+crearMalla();
