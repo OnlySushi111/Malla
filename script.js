@@ -136,4 +136,45 @@ function guardarEstado() {
   localStorage.setItem("estadoRamos", JSON.stringify(estado));
 }
 
+function crearMalla() {
+  const contenedor = document.getElementById("malla");
+  contenedor.innerHTML = ""; // limpiar por si ya había algo
+
+  // Agrupar los ramos por semestre
+  const ramosPorSemestre = {};
+  ramos.forEach(ramo => {
+    const s = ramo.semestre;
+    if (!ramosPorSemestre[s]) ramosPorSemestre[s] = [];
+    ramosPorSemestre[s].push(ramo);
+  });
+
+  // Renderizar por semestre
+  Object.keys(ramosPorSemestre).sort((a, b) => a - b).forEach(s => {
+    const divSemestre = document.createElement("div");
+    divSemestre.classList.add("semestre");
+
+    const h2 = document.createElement("h2");
+    h2.textContent = `${s}° Semestre`;
+    divSemestre.appendChild(h2);
+
+    const contenedorRamos = document.createElement("div");
+    contenedorRamos.classList.add("cursos");
+
+    ramosPorSemestre[s].forEach(ramo => {
+      const div = document.createElement("div");
+      div.classList.add("ramo");
+      div.textContent = ramo.nombre;
+      div.dataset.nombre = ramo.nombre;
+
+      // Evento de click
+      div.addEventListener("click", () => toggleRamo(ramo.nombre));
+
+      contenedorRamos.appendChild(div);
+    });
+
+    divSemestre.appendChild(contenedorRamos);
+    contenedor.appendChild(divSemestre);
+  });
+}
+
 crearMalla();
