@@ -11,16 +11,19 @@ h1 {
 }
 
 .malla {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 10px;
-  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 }
 
 .semestre {
-  background-color: #ffe0ec;
+  background-color: #ffe6ec;
   border-radius: 10px;
-  padding: 10px;
+  padding: 15px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 10px #ffb6c188;
 }
 
 .semestre h2 {
