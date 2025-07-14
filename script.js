@@ -13,6 +13,7 @@ const ramos = [
   { nombre: "Introducción al pensamiento filosófico", semestre: 2 },
   { nombre: "Inglés I", semestre: 2, abre: ["Inglés II"] },
   { nombre: "Comunicación Efectiva", semestre: 2 },
+  { nombre: "Primeros Auxilios", semestre: 2 },
 
   { nombre: "Fisiología", semestre: 3, abre: ["Farmacología Clínica para Enfermería", "Fisiopatología", "Cuidados de Enfermería II"] },
   { nombre: "Ciclo Vital", semestre: 3, abre: ["Cuidados de Enfermería en la Mujer y Recién Nacido"] },
